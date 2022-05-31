@@ -1,7 +1,7 @@
 -include ../../../../petscdir.mk
 PETSC_DIR=/home/bady/lib/petsc-3.16.6-opt
 
-CFLAGS           = -O3
+CFLAGS           = 
 CPPFLAGS         = 
 EXAMPLESC        = main.c
 MANSEC           = KSP
