@@ -12,7 +12,7 @@ int main(int argc, char **argv){
 	PetscInt		i, j, size, iteration_num, Istart, Iend, col[3];
 	PetscScalar		one = 1.0, dx = 0.01, dt = 0.001, 
 					rho = 1.0, c = 1.0, l = 1.0, k = 1.0, lambda, gamma,
-					value[3], val;
+					value[3], val, fval;
 	Vec				u_last, u_now, f;
 	Mat 			A;
 	//KSP				ksp;
@@ -49,7 +49,7 @@ int main(int argc, char **argv){
 	PetscCall(VecSetValue(u_last,size-1,0.0,INSERT_VALUES));
 	PetscCall(VecAssemblyBegin(u_last));
     PetscCall(VecAssemblyEnd(u_last));
-	// PetscCall(VecView(u_last,PETSC_VIEWER_STDOUT_WORLD));
+	PetscCall(VecView(u_last,PETSC_VIEWER_STDOUT_WORLD));
 
 	/*设置f*/
 	PetscCall(VecGetOwnershipRange(f, &Istart, &Iend));
@@ -112,15 +112,26 @@ int main(int argc, char **argv){
 	// 	// PetscCall(VecAssemblyBegin(u_last));
 	// 	// PetscCall(VecAssemblyEnd(u_last));
 	// }
-	for(j=1;j<size-1;j++){
-			col[0] = j-1; col[1] = j; col[2] = j+1;
-			PetscCall(VecGetValues(u_last, 1, &col[0], &value[0]));
-			PetscCall(VecGetValues(u_last, 1, &col[1], &value[1]));
-			PetscCall(VecGetValues(u_last, 1, &col[2], &value[2]));
-			// PetscPrintf(PETSC_COMM_WORLD,"u_n-1 =  %g\n u_n =  %g\n u_n+1 =  %g\n", value[0],value[1],value[2]);
-		// val = lambda * () 
-	}
+	for(i=0;i<iteration_num-1;i++){
+		for(j=1;j<size-1;j++){
+				col[0] = j-1; col[1] = j; col[2] = j+1;
+				PetscCall(VecGetValues(u_last, 1, &col[0], &value[0]));
+				PetscCall(VecGetValues(u_last, 1, &col[1], &value[1]));
+				PetscCall(VecGetValues(u_last, 1, &col[2], &value[2]));
+				PetscCall(VecGetValues(f, 1, &col[1], &fval));
 
+				val = lambda * (value[0] + value[2])+(1-2*lambda) * value[1] + gamma * fval;
+				PetscCall(VecSetValues(u_now,1,&j,&val,INSERT_VALUES));
+			
+		}
+		PetscCall(VecSetValue(u_last,0,0.0,INSERT_VALUES));
+		PetscCall(VecSetValue(u_last,size-1,0.0,INSERT_VALUES));
+		PetscCall(VecAssemblyBegin(u_last));
+		PetscCall(VecAssemblyEnd(u_last));
+
+		PetscCall(VecCopy(u_now,u_last));
+	}
+	PetscCall(VecView(u_now,PETSC_VIEWER_STDOUT_WORLD));
 	/*隐式方法*/
 
 
