@@ -1,6 +1,5 @@
 /*
-	处理一维传热方程；
-	这里petsc 的scalar和real区别还没有很清晰，统一先用scalar
+	显示方法处理一维传热方程；
 */
 #include <petsc.h>
 #include <math.h>
@@ -15,7 +14,6 @@ int main(int argc, char **argv){
 					value[3], val, fval;
 	Vec				u_last, u_now, f;
 	Mat 			A;
-	//KSP				ksp;
 	
 	PetscCall(PetscInitialize(&argc,&argv,(char*)0,NULL));
 	PetscCallMPI(MPI_Comm_rank(PETSC_COMM_WORLD,&rank));
@@ -45,8 +43,6 @@ int main(int argc, char **argv){
 		val = exp(i*dx);
 		PetscCall(VecSetValues(u_last,1,&i,&val,INSERT_VALUES));
 	}
-	// PetscCall(VecSetValue(u_last,0,0.0,INSERT_VALUES));
-	// PetscCall(VecSetValue(u_last,size-1,0.0,INSERT_VALUES));
 	PetscCall(VecAssemblyBegin(u_last));
     PetscCall(VecAssemblyEnd(u_last));
 	// PetscCall(VecView(u_last,PETSC_VIEWER_STDOUT_WORLD));
@@ -84,7 +80,7 @@ int main(int argc, char **argv){
         PetscCall(MatSetValues(A,1,&i,2,col,value,INSERT_VALUES));
     }
 
-    /* Set entries corresponding to the mesh interior */
+    /* 除了两行特判之外其他都符合一行三个元素 */
     value[0] = lambda; value[1] = one-2.0*lambda; value[2] = lambda;
     for (i=Istart; i<Iend; i++) {
         col[0] = i-1; col[1] = i; col[2] = i+1;
@@ -107,7 +103,7 @@ int main(int argc, char **argv){
 		PetscCall(VecCopy(u_now,u_last));
 	}
 	PetscCall(VecView(u_now,PETSC_VIEWER_STDOUT_WORLD));
-	/*隐式方法*/
+
 
 	PetscPrintf(PETSC_COMM_WORLD,"size =  %D\n", size);
 

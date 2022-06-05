@@ -1,6 +1,5 @@
 /*
-	处理一维传热方程；
-	这里petsc 的scalar和real区别还没有很清晰，统一先用scalar
+	隐式方法处理一维传热方程；
 */
 #include <petsc.h>
 #include <math.h>
@@ -9,13 +8,13 @@
 int main(int argc, char **argv){
 
 	PetscMPIInt		rank;
-	PetscInt		i, j, size, iteration_num, Istart, Iend, col[3];
+	PetscInt		i, size, iteration_num, Istart, Iend, col[3];
 	PetscScalar		one = 1.0, dx = 0.01, dt = 0.00001, 
 					rho = 1.0, c = 1.0, l = 1.0, k = 1.0, lambda, gamma,
-					value[3], val, fval;
-	Vec				u_last, u_now, f;
+					value[3], val;
+	Vec				u_last, u_now, f, b;
 	Mat 			A;
-	//KSP				ksp;
+	KSP				ksp;
 	
 	PetscCall(PetscInitialize(&argc,&argv,(char*)0,NULL));
 	PetscCallMPI(MPI_Comm_rank(PETSC_COMM_WORLD,&rank));
@@ -38,6 +37,7 @@ int main(int argc, char **argv){
 	PetscCall(VecSetFromOptions(u_last));
 	PetscCall(VecDuplicate(u_last,&u_now));
 	PetscCall(VecDuplicate(u_now,&f));
+    PetscCall(VecDuplicate(u_now,&b));
 
 	/*设置u_0*/
 	PetscCall(VecGetOwnershipRange(u_last, &Istart, &Iend));
@@ -54,14 +54,13 @@ int main(int argc, char **argv){
 	/*设置f*/
 	PetscCall(VecGetOwnershipRange(f, &Istart, &Iend));
 	for (i=Istart; i<Iend; i++) {
-		val = gamma * sin(l*i*dx*PI);
+		val = sin(l*i*dx*PI);
 		PetscCall(VecSetValues(f,1,&i,&val,INSERT_VALUES));
 	}
 	
 	PetscCall(VecAssemblyBegin(f));
     PetscCall(VecAssemblyEnd(f));
 	// PetscCall(VecView(f,PETSC_VIEWER_STDOUT_WORLD));
-
 
 	/*初始化矩阵A, 预分配一个三对角矩阵的大小*/
 	PetscCall(MatCreate(PETSC_COMM_WORLD,&A));
@@ -94,21 +93,20 @@ int main(int argc, char **argv){
 	PetscCall(MatAssemblyBegin(A,MAT_FINAL_ASSEMBLY));
   	PetscCall(MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY));
 	// PetscCall(MatView(A,PETSC_VIEWER_STDOUT_WORLD));
-	
+
+    PetscCall(KSPCreate(PETSC_COMM_WORLD,&ksp));
+    PetscCall(KSPSetOperators(ksp,A,A));
+    PetscCall(KSPSetTolerances(ksp,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT));
+    PetscCall(KSPSetFromOptions(ksp));
+
+	/*隐式方法*/
 	PetscPrintf(PETSC_COMM_WORLD,"Lambda =  %g, gamma = %g\n", lambda, gamma);
 	for(i=0;i<iteration_num;i++){
-		for(j=1;j<size-1;j++){
-				col[0] = j-1; col[1] = j; col[2] = j+1;
-				PetscCall(VecGetValues(u_last, 1, &col[0], &value[0]));
-				PetscCall(VecGetValues(u_last, 1, &col[1], &value[1]));
-				PetscCall(VecGetValues(u_last, 1, &col[2], &value[2]));
-				PetscCall(VecGetValues(f, 1, &col[1], &fval));
 
-				val = lambda * (value[0] + value[2])+(1-2*lambda) * value[1] + fval;
-				// PetscPrintf(PETSC_COMM_WORLD,"val =  %g, value =%g %g %g, f= %g\n", val, value[0], value[1],value[2], fval);
-				PetscCall(VecSetValues(u_now,1,&j,&val,INSERT_VALUES));
-			
-		}
+        PetscCall(VecWAXPY(b, gamma, f, u_last));
+        PetscCall(KSPSolve(ksp,b,u_now));
+
+        /* 记得边界条件设置为0 */
 		PetscCall(VecSetValue(u_now,0,0.0,INSERT_VALUES));
 		PetscCall(VecSetValue(u_now,size-1,0.0,INSERT_VALUES));
 		PetscCall(VecAssemblyBegin(u_now));
@@ -117,9 +115,7 @@ int main(int argc, char **argv){
 		PetscCall(VecCopy(u_now,u_last));
 	}
 	PetscCall(VecView(u_now,PETSC_VIEWER_STDOUT_WORLD));
-	/*隐式方法*/
-
-
+	
 
 	// PetscCall(VecView(u_last,PETSC_VIEWER_STDOUT_WORLD));
 	PetscPrintf(PETSC_COMM_WORLD,"size =  %D\n", size);
@@ -128,6 +124,7 @@ int main(int argc, char **argv){
 	PetscCall(VecDestroy(&u_last));
 	PetscCall(VecDestroy(&u_now));
 	PetscCall(VecDestroy(&f));
+    PetscCall(VecDestroy(&b));
 	PetscCall(MatDestroy(&A));
 	PetscCall(PetscFinalize());
 	return 0;
