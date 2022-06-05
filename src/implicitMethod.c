@@ -40,20 +40,20 @@ int main(int argc, char **argv){
 	PetscCall(VecDuplicate(u_now,&f));
 
 	/*设置u_0*/
-	PetscCall(VecGetOwnershipRange(u_last, &Istart, &Iend));
-	for (i=Istart; i<Iend; i++) {
+	// PetscCall(VecGetOwnershipRange(u_last, &Istart, &Iend));
+	for (i=1; i<size-1; i++) {
 		val = exp(i*dx);
 		PetscCall(VecSetValues(u_last,1,&i,&val,INSERT_VALUES));
 	}
-	PetscCall(VecSetValue(u_last,0,0.0,INSERT_VALUES));
-	PetscCall(VecSetValue(u_last,size-1,0.0,INSERT_VALUES));
+	// PetscCall(VecSetValue(u_last,0,0.0,INSERT_VALUES));
+	// PetscCall(VecSetValue(u_last,size-1,0.0,INSERT_VALUES));
 	PetscCall(VecAssemblyBegin(u_last));
     PetscCall(VecAssemblyEnd(u_last));
 	// PetscCall(VecView(u_last,PETSC_VIEWER_STDOUT_WORLD));
 
 	/*设置f*/
-	PetscCall(VecGetOwnershipRange(f, &Istart, &Iend));
-	for (i=Istart; i<Iend; i++) {
+	// PetscCall(VecGetOwnershipRange(f, &Istart, &Iend));
+	for (i=1; i<size-1; i++) {
 		val = gamma * sin(l*i*dx*PI);
 		PetscCall(VecSetValues(f,1,&i,&val,INSERT_VALUES));
 	}
@@ -74,18 +74,18 @@ int main(int argc, char **argv){
 
 	if (!Istart) {
         Istart = 1;
-        i      = 0; col[0] = 0; col[1] = 1; value[0] = one+2.0*lambda; value[1] = -lambda;
+        i      = 0; col[0] = 0; col[1] = 1; value[0] = one-2.0*lambda; value[1] = lambda;
         PetscCall(MatSetValues(A,1,&i,2,col,value,INSERT_VALUES));
     }
     
     if (Iend == size) {
         Iend = size-1;
-        i    = size-1; col[0] = size-2; col[1] = size-1; value[0] = -lambda; value[1] = 1.0+2.0*lambda;
+        i    = size-1; col[0] = size-2; col[1] = size-1; value[0] = lambda; value[1] = 1.0-2.0*lambda;
         PetscCall(MatSetValues(A,1,&i,2,col,value,INSERT_VALUES));
     }
 
     /* Set entries corresponding to the mesh interior */
-    value[0] = -lambda; value[1] = one+2.0*lambda; value[2] = -lambda;
+    value[0] = lambda; value[1] = one-2.0*lambda; value[2] = lambda;
     for (i=Istart; i<Iend; i++) {
         col[0] = i-1; col[1] = i; col[2] = i+1;
         PetscCall(MatSetValues(A,1,&i,3,col,value,INSERT_VALUES));
@@ -95,37 +95,10 @@ int main(int argc, char **argv){
   	PetscCall(MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY));
 	// PetscCall(MatView(A,PETSC_VIEWER_STDOUT_WORLD));
 	
-
-	/*这部分后面写一个函数放到.h 里面模块化一下*/
-	/*显示方法*/
-	// for(i=0;i<iteration_num-1;i++){
-	// 	for(j=1;j<size-1;j++){
-	// 		col[0] = j-1; col[1] = j; col[2] = j+1;
-	// 		PetscCall(VecGetValues(u_last, 1, &col[0], &val));
-	// 		PetscPrintf(PETSC_COMM_WORLD,"size =  %g\n", value);
-	// 	// val = lambda * () 
-	// 	}
-		
-
-	// 	// PetscCall(VecSetValue(u_last,0,0.0,INSERT_VALUES));
-	// 	// PetscCall(VecSetValue(u_last,size-1,0.0,INSERT_VALUES));
-	// 	// PetscCall(VecAssemblyBegin(u_last));
-	// 	// PetscCall(VecAssemblyEnd(u_last));
-	// }
 	PetscPrintf(PETSC_COMM_WORLD,"Lambda =  %g, gamma = %g\n", lambda, gamma);
 	for(i=0;i<iteration_num;i++){
-		for(j=1;j<size-1;j++){
-				col[0] = j-1; col[1] = j; col[2] = j+1;
-				PetscCall(VecGetValues(u_last, 1, &col[0], &value[0]));
-				PetscCall(VecGetValues(u_last, 1, &col[1], &value[1]));
-				PetscCall(VecGetValues(u_last, 1, &col[2], &value[2]));
-				PetscCall(VecGetValues(f, 1, &col[1], &fval));
-
-				val = lambda * (value[0] + value[2])+(1-2*lambda) * value[1] + fval;
-				// PetscPrintf(PETSC_COMM_WORLD,"val =  %g, value =%g %g %g, f= %g\n", val, value[0], value[1],value[2], fval);
-				PetscCall(VecSetValues(u_now,1,&j,&val,INSERT_VALUES));
-			
-		}
+		PetscCall(MatMult(A,u_last,u_now));
+        PetscCall(VecAXPY(u_now,1.0,f));
 		PetscCall(VecSetValue(u_now,0,0.0,INSERT_VALUES));
 		PetscCall(VecSetValue(u_now,size-1,0.0,INSERT_VALUES));
 		PetscCall(VecAssemblyBegin(u_now));
@@ -136,9 +109,6 @@ int main(int argc, char **argv){
 	PetscCall(VecView(u_now,PETSC_VIEWER_STDOUT_WORLD));
 	/*隐式方法*/
 
-
-
-	// PetscCall(VecView(u_last,PETSC_VIEWER_STDOUT_WORLD));
 	PetscPrintf(PETSC_COMM_WORLD,"size =  %D\n", size);
 
 	/*程序执行完之后再进行析构和终结处理*/

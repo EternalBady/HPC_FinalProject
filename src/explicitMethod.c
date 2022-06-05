@@ -95,23 +95,6 @@ int main(int argc, char **argv){
   	PetscCall(MatAssemblyEnd(A,MAT_FINAL_ASSEMBLY));
 	// PetscCall(MatView(A,PETSC_VIEWER_STDOUT_WORLD));
 	
-
-	/*这部分后面写一个函数放到.h 里面模块化一下*/
-	/*显示方法*/
-	// for(i=0;i<iteration_num-1;i++){
-	// 	for(j=1;j<size-1;j++){
-	// 		col[0] = j-1; col[1] = j; col[2] = j+1;
-	// 		PetscCall(VecGetValues(u_last, 1, &col[0], &val));
-	// 		PetscPrintf(PETSC_COMM_WORLD,"size =  %g\n", value);
-	// 	// val = lambda * () 
-	// 	}
-		
-
-	// 	// PetscCall(VecSetValue(u_last,0,0.0,INSERT_VALUES));
-	// 	// PetscCall(VecSetValue(u_last,size-1,0.0,INSERT_VALUES));
-	// 	// PetscCall(VecAssemblyBegin(u_last));
-	// 	// PetscCall(VecAssemblyEnd(u_last));
-	// }
 	PetscPrintf(PETSC_COMM_WORLD,"Lambda =  %g, gamma = %g\n", lambda, gamma);
 	for(i=0;i<iteration_num;i++){
 		for(j=1;j<size-1;j++){
