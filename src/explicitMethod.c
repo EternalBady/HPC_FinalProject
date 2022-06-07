@@ -29,6 +29,8 @@ int main(int argc, char **argv)
     Vec u_last, u_now, f, b;
     Mat A;
     KSP ksp;
+    //计时器
+    PetscLogDouble begin, end;
 
     PetscCall(PetscInitialize(&argc, &argv, (char *)0, NULL));
     PetscCallMPI(MPI_Comm_rank(PETSC_COMM_WORLD, &rank));
@@ -63,7 +65,7 @@ int main(int argc, char **argv)
     PetscCall(MatSetUp(A));
 
     /* 第一处计时, 计算设置向量和矩阵所花的时间 */
-
+    PetscCall(PetscTime(&begin));
     /*设置u_0*/
     PetscCall(VecGetOwnershipRange(u_last, &Istart, &Iend));
     for (i = Istart; i < Iend; i++)
@@ -130,6 +132,9 @@ int main(int argc, char **argv)
     // PetscCall(MatView(A,PETSC_VIEWER_STDOUT_WORLD));
 
     /* 第一次计时结束打印出设置矩阵的运行时间 */
+    PetscCall(PetscTime(&end));
+    PetscPrintf(PETSC_COMM_WORLD, "Assembly Time = %g\n", end-begin);
+    PetscPrintf(PETSC_COMM_WORLD, "Lambda =  %g, gamma = %g\n", lambda, gamma);
 
     PetscCall(KSPCreate(PETSC_COMM_WORLD, &ksp));
     PetscCall(KSPSetOperators(ksp, A, A));
@@ -137,8 +142,8 @@ int main(int argc, char **argv)
     PetscCall(KSPSetFromOptions(ksp));
 
     /*隐式方法*/
-    PetscPrintf(PETSC_COMM_WORLD, "Lambda =  %g, gamma = %g\n", lambda, gamma);
     /* 第二次计时开始, 计算迭代所花的时间 */
+    PetscCall(PetscTime(&begin));
     for (i = 0; i < iteration_num; i++)
     {
 
@@ -156,7 +161,9 @@ int main(int argc, char **argv)
         /* 每20次迭代保存一次断点 */
     }
     /* 第二次计时结束，打印出运行时间 */
+    PetscCall(PetscTime(&end));
     PetscCall(VecView(u_now, PETSC_VIEWER_STDOUT_WORLD));
+    PetscPrintf(PETSC_COMM_WORLD, "Iteration Time = %g\n", end-begin);
 
     /* 将最终结果输出到文件中 */
 
