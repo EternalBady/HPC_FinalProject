@@ -3,7 +3,7 @@
 */
 #include <petsc.h>
 #include <math.h>
-#define PI 3.14159265358979323846
+#define PI acos(-1)
 
 int main(int argc, char **argv)
 {
