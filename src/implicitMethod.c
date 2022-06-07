@@ -18,9 +18,9 @@ int main(int argc, char **argv)
 
     // dx 空间步长, dt 时间步长, t为当前的时刻
     // lambda=CFL 就是CFL, gamma 则为报告分析中简化计算的两个中间量
-    PetscScalar dx, dt = 0.00001,
-                    rho = 1.0, c = 1.0, l = 1.0, k = 1.0,
-                    lambda, gamma, value[3], val, t = 0.0;
+    PetscScalar dx, dt = 0.00001, error=0.0,
+                rho = 1.0, c = 1.0, l = 1.0, k = 1.0,
+                lambda, gamma, value[3], val, t = 0.0;
 
     // u_last 迭代过程中的上一次的u, u_now 迭代过程中当前的u, u_a是解析解;
     // f 为公式中的f, A 为迭代中的矩阵, temp为暂存向量
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
     PetscCall(PetscOptionsGetInt(NULL, NULL, "-restart", &restart, NULL));
     PetscCall(PetscOptionsGetInt(NULL, NULL, "-size", &size, NULL));
 
-    /*初始化向量u_last, u_now, f, 解析解u_a*/
+    /*初始化向量u_last, u_now, f, 解析解u_a, 暂存向量temp*/
     PetscCall(VecCreate(PETSC_COMM_WORLD, &f));
     PetscCall(VecSetSizes(f, PETSC_DECIDE, size + 1));
     PetscCall(VecSetFromOptions(f));
@@ -53,10 +53,18 @@ int main(int argc, char **argv)
     PetscCall(VecSetSizes(temp, PETSC_DECIDE, 3));
     PetscCall(VecSetFromOptions(temp));
 
+    /*初始化矩阵A 大小: (size+1)*(size+1), 预分配一个三对角矩阵的大小*/
+    PetscCall(MatCreate(PETSC_COMM_WORLD, &A));
+    PetscCall(MatSetSizes(A, PETSC_DECIDE, PETSC_DECIDE, size + 1, size + 1));
+    PetscCall(MatSetFromOptions(A));
+    //这里都设置为3, 因为一行最多的元素也就是3, 不会超过这个数；
+    PetscCall(MatMPIAIJSetPreallocation(A, 3, PETSC_NULL, 3, PETSC_NULL));
+    PetscCall(MatSetUp(A));
+
     /*如果需要重启, 那么从FILE 中读取文件，如果不需要则执行下面的操作*/
     if (restart)
     {
-        PetscCall(PetscTime(&begin));
+        /* 用viewer打开FILE, 然后VecLoad两个存储的向量, 最后析构viewer */
         PetscCall(PetscViewerHDF5Open(PETSC_COMM_WORLD, FILE, FILE_MODE_READ, &viewer));
         PetscCall(PetscObjectSetName((PetscObject) temp, "explicit-temp"));
         PetscCall(PetscObjectSetName((PetscObject) u_last, "explicit-vector"));
@@ -64,13 +72,11 @@ int main(int argc, char **argv)
         PetscCall(VecLoad(u_last, viewer));
         PetscCall(PetscViewerDestroy(&viewer));
 
+        /* 对temp所存的变量进行获取 */
         PetscCall(VecGetValues(temp, 3, col, value));
         it = value[0];
         size = value[1];
         dt = value[2];
-
-        PetscCall(PetscTime(&end));
-        PetscPrintf(PETSC_COMM_WORLD, "Reading from FILE cost = %g\n", end - begin);
     }
     else
     {
@@ -105,14 +111,6 @@ int main(int argc, char **argv)
         exit(0);
     }
 
-    /*初始化矩阵A 大小: (size+1)*(size+1), 预分配一个三对角矩阵的大小*/
-    PetscCall(MatCreate(PETSC_COMM_WORLD, &A));
-    PetscCall(MatSetSizes(A, PETSC_DECIDE, PETSC_DECIDE, size + 1, size + 1));
-    PetscCall(MatSetFromOptions(A));
-    //这里都设置为3, 因为一行最多的元素也就是3, 不会超过这个数；
-    PetscCall(MatMPIAIJSetPreallocation(A, 3, PETSC_NULL, 3, PETSC_NULL));
-    PetscCall(MatSetUp(A));
-
     /*设置f*/
     PetscCall(VecGetOwnershipRange(f, &Istart, &Iend));
     for (i = Istart; i < Iend; i++)
@@ -125,6 +123,7 @@ int main(int argc, char **argv)
     PetscCall(VecAssemblyEnd(f));
     // PetscCall(VecView(f,PETSC_VIEWER_STDOUT_WORLD));
 
+    /* 设置三对角矩阵 */
     PetscCall(MatGetOwnershipRange(A, &Istart, &Iend));
 
     if (!Istart)
@@ -165,14 +164,27 @@ int main(int argc, char **argv)
     PetscCall(MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY));
     // PetscCall(MatView(A,PETSC_VIEWER_STDOUT_WORLD));
     if (!restart)
-    {
+    {   
+        // 这里如果是非重启模式才会对程序构造向量和矩阵进行计时;
         PetscCall(PetscTime(&end));
         PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Assembly Time = %g\n", end - begin));
     }
 
+    /* 打印程序的参数，查看是否有错 */
     PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Lambda =  %g, gamma = %g\n", lambda, gamma));
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD, "it =  %d, size = %d, dt =  %g\n", it, size+1, dt));
 
-    PetscCall(PetscPrintf(PETSC_COMM_WORLD, "it =  %d, size = %d, dt =  %g\n", it, size, dt));
+    /* 造一个解析解, 此处不参与计时 */
+    PetscCall(VecGetOwnershipRange(u_a, &Istart, &Iend));
+    for (i = Istart; i < Iend; i++)
+    {
+        val = (PetscScalar) (sin(PI*dx*i*l) - sin(l*PI)*dx*i)/(PI*PI*l*l); // 推导得出的解析解
+        PetscCall(VecSetValues(u_a, 1, &i, &val, INSERT_VALUES));
+    }
+
+    PetscCall(VecAssemblyBegin(u_a));
+    PetscCall(VecAssemblyEnd(u_a));
+    // PetscCall(VecView(u_a,PETSC_VIEWER_STDOUT_WORLD));
 
     /* 第二处计时, 计算迭代所花的时间 */
     PetscCall(PetscTime(&begin));
@@ -180,8 +192,9 @@ int main(int argc, char **argv)
     {
         t += dt;
 
-        PetscCall(MatMult(A, u_last, u_now));
-        PetscCall(VecAXPY(u_now, 1.0, f));
+        PetscCall(MatMultAdd(A, u_last, f, u_now));
+        // PetscCall(MatMult(A, u_last, u_now));
+        // PetscCall(VecAXPY(u_now, 1.0, f));
         PetscCall(VecSetValue(u_now, 0, 0.0, INSERT_VALUES));
         PetscCall(VecSetValue(u_now, size, 0.0, INSERT_VALUES));
         PetscCall(VecAssemblyBegin(u_now));
@@ -190,13 +203,14 @@ int main(int argc, char **argv)
         PetscCall(VecCopy(u_now, u_last));
 
         /*
-            每10次迭代保存一次断点, 这里需要保存的有
+            每20次迭代保存一次断点, 这里需要保存的有
             1. it    : 迭代到哪一步;
             2. size  : 网格大小
             3. dt    : 时间步大小
-            4. u_last: 当前迭代的结果,copy了u_now的结果
+            4. u_last: 当前迭代的结果,copy了u_now的结果, 存u_last 有利于和上面的读文件统一
+            保存文件的耗时非常高, 在一些测试中会暂时移除
         */
-        if (!(it % 10000))
+        if (!(it % 1000))
         {
             value[0] = it;
             value[1] = size;
@@ -209,6 +223,7 @@ int main(int argc, char **argv)
             PetscCall(VecAssemblyBegin(temp));
             PetscCall(VecAssemblyEnd(temp));
 
+            /*利用viewer 存储temp和u_last*/
             PetscCall(PetscViewerCreate(PETSC_COMM_WORLD, &viewer));
             PetscCall(PetscViewerHDF5Open(PETSC_COMM_WORLD, FILE, FILE_MODE_WRITE, &viewer));
             PetscCall(PetscObjectSetName((PetscObject) temp,   "explicit-temp"));
@@ -221,11 +236,17 @@ int main(int argc, char **argv)
     PetscCall(PetscTime(&end));
     PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Iteration Time = %g\n", end - begin));
 
-    PetscCall(VecView(u_now, PETSC_VIEWER_STDOUT_WORLD));
-
-    PetscCall(PetscPrintf(PETSC_COMM_WORLD, "size =  %D, now = %g\n", size + 1, t));
-    /*误差分析*/
-    /* 造一个解析解, 此处不参与计时 */
+    // PetscCall(VecView(u_now, PETSC_VIEWER_STDOUT_WORLD));
+    /*误差分析, 跟解析解对比*/
+    PetscScalar a = 0.0, b = 0.0; // 用来暂存对比
+    for(i=0;i<size+1;i++){
+        PetscCall(VecGetValues(u_a, 1, &i, &a));
+        PetscCall(VecGetValues(u_last, 1, &i, &b));
+        if(fabs(a-b) > error){
+            error = fabs(a-b);
+        }   
+    }
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Error = %g\n", error));
 
     /*程序执行完之后再进行析构和终结处理*/
     PetscCall(VecDestroy(&u_last));

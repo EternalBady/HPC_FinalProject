@@ -5,9 +5,9 @@ CFLAGS           =
 CPPFLAGS         = 
 EXAMPLESC        = main.c, implicitMethod.c, test1.c, explicitMethod.c
 MANSEC           = KSP
-CLEANFILES       = rhs.vtk solution.vtk
+CLEANFILES       = implicitMethod.h5 explicitMethod.h5
 NP               = 1
-DIRS             = network amrex
+DIRS             = src
 
 include ${PETSC_DIR}/lib/petsc/conf/variables
 include ${PETSC_DIR}/lib/petsc/conf/rules
