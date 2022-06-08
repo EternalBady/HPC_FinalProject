@@ -13,6 +13,8 @@ petscviewerhdf5.h
 -
 math.h
 -
+assert.h
+-
 
 /home/bady/lib/petsc-3.16.6-opt/include/H5ACpublic.h
 H5public.h

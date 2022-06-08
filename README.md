@@ -2,8 +2,12 @@
 ## Title: 一维传热方程的迭代求解
 ## Information
 autior：苏梓鑫;
+
 Data:   2022/06/06;
+
 Notification: 最终版本是在TAIYI 上跑的，所以CMakeLists.txt 是TAIYI版本的，这里提供了本地版本的在local文件夹里
+## 使用说明
+
 ## Folder Introduction
 ### analysis
 ### bin

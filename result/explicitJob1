@@ -1,0 +1,32 @@
+#!/bin/bash
+#BSUB -J explicitJob-1
+#BSUB -q short
+#BSUB -n 40
+#BUSB -e explicitJob-1.err
+#BUSB -o explicitJob-1.out
+#BSUB -R "span[ptile=40]"
+
+module purge
+module load intel/2018.4
+module load mpi/intel/2018.4
+
+
+# No option
+# explicit fixed-size  
+mpirun -np 1  ../build/explicitMethod -size 1000 -dt 0.00000001 -testing_mode 1 -log_view >>exp-noption.txt 2>&1
+mpirun -np 5  ../build/explicitMethod -size 1000 -dt 0.00000001 -testing_mode 1 -log_view >>exp-noption.txt 2>&1
+mpirun -np 10 ../build/explicitMethod -size 1000 -dt 0.00000001 -testing_mode 1 -log_view >>exp-noption.txt 2>&1
+mpirun -np 15 ../build/explicitMethod -size 1000 -dt 0.00000001 -testing_mode 1 -log_view >>exp-noption.txt 2>&1
+mpirun -np 20 ../build/explicitMethod -size 1000 -dt 0.00000001 -testing_mode 1 -log_view >>exp-noption.txt 2>&1
+mpirun -np 25 ../build/explicitMethod -size 1000 -dt 0.00000001 -testing_mode 1 -log_view >>exp-noption.txt 2>&1
+mpirun -np 30 ../build/explicitMethod -size 1000 -dt 0.00000001 -testing_mode 1 -log_view >>exp-noption.txt 2>&1
+mpirun -np 35 ../build/explicitMethod -size 1000 -dt 0.00000001 -testing_mode 1 -log_view >>exp-noption.txt 2>&1
+mpirun -np 40 ../build/explicitMethod -size 1000 -dt 0.00000001 -testing_mode 1 -log_view >>exp-noption.txt 2>&1
+
+# explicit iso-granular 
+mpirun -np 1  ../build/explicitMethod -size 1000 -dt 0.000000001    -testing_mode 1 -log_view >>exp-foption.txt 2>&1
+mpirun -np 2  ../build/explicitMethod -size 2000 -dt 0.000000001  -testing_mode 1 -log_view >>exp-foption.txt 2>&1
+mpirun -np 4  ../build/explicitMethod -size 4000 -dt 0.000000001  -testing_mode 1 -log_view >>exp-foption.txt 2>&1
+mpirun -np 6  ../build/explicitMethod -size 6000 -dt 0.000000001  -testing_mode 1 -log_view >>exp-foption.txt 2>&1
+mpirun -np 8  ../build/explicitMethod -size 8000 -dt 0.000000001 -testing_mode 1 -log_view >>exp-foption.txt 2>&1
+mpirun -np 10 ../build/explicitMethod -size 10000 -dt 0.000000001  -testing_mode 1 -log_view >>exp-foption.txt 2>&1

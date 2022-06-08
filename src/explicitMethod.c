@@ -4,7 +4,7 @@
 #include <petsc.h>
 #include <petscviewerhdf5.h>
 #include <math.h>
-
+#include <assert.h>
 #define PI acos(-1)
 #define FILE "explicitMethod.h5"
 
@@ -65,6 +65,8 @@ int main(int argc, char **argv)
     ierr = MatSetUp(A);CHKERRQ(ierr);
 
     /*如果需要重启, 那么从FILE 中读取文件，如果不需要则执行下面的操作*/
+    /* 第一处计时, 计算设置向量和矩阵所花的时间 */
+    ierr = PetscTime(&begin);CHKERRQ(ierr);
     if (restart)
     {
         /* 用viewer打开FILE, 然后VecLoad两个存储的向量, 最后析构viewer */
@@ -85,8 +87,7 @@ int main(int argc, char **argv)
     {
         it = 0;
         dx = 1.0 / size;
-        /* 第一处计时, 计算设置向量和矩阵所花的时间 */
-        ierr = PetscTime(&begin);CHKERRQ(ierr);
+        
         /*设置u_0*/
         ierr = VecGetOwnershipRange(u_last, &Istart, &Iend);CHKERRQ(ierr);
         for (i = Istart; i < Iend; i++)
@@ -106,6 +107,9 @@ int main(int argc, char **argv)
     iteration_num = 1 / dt + 1;
     lambda = k * dt / (rho * c * dx * dx);
     gamma = dt / (rho * c);
+    assert(dx);
+    assert(iteration_num);
+    assert(gamma);
 
     if (lambda > 0.5)
     {
@@ -191,48 +195,7 @@ int main(int argc, char **argv)
 
     /* 第二处计时, 计算迭代所花的时间 */
     ierr = PetscTime(&begin);CHKERRQ(ierr);
-
-    PetscLogDouble t1, t2;
-    PetscScalar    t_iter, t_write;
-    ierr = PetscTime(&t1);CHKERRQ(ierr);
-    t += dt;
-    it++;
-
-    ierr = MatMultAdd(A, u_last, f, u_now);CHKERRQ(ierr);
-    ierr = VecSetValue(u_now, 0, 0.0, INSERT_VALUES);CHKERRQ(ierr);
-    ierr = VecSetValue(u_now, size, 0.0, INSERT_VALUES);CHKERRQ(ierr);
-    ierr = VecAssemblyBegin(u_now);CHKERRQ(ierr);
-    ierr = VecAssemblyEnd(u_now);CHKERRQ(ierr);
-    // 将当前结果赋给上一次的vector
-    ierr = VecCopy(u_now, u_last);CHKERRQ(ierr);
-    ierr = PetscTime(&t2);CHKERRQ(ierr);
-    t_iter = t2-t1;
-
-    value[0] = it;
-    value[1] = size;
-    value[2] = dt;
-    col[0] = 0;
-    col[1] = 1;
-    col[2] = 2;
-    ierr = VecSetValues(temp, 3, col, value, INSERT_VALUES);CHKERRQ(ierr);
-
-    ierr = VecAssemblyBegin(temp);CHKERRQ(ierr);
-    ierr = VecAssemblyEnd(temp);CHKERRQ(ierr);
-
-    /*利用viewer 存储temp和u_last*/
-    // ierr = PetscViewerCreate(PETSC_COMM_WORLD, &viewer);CHKERRQ(ierr);
     ierr = PetscViewerHDF5Open(PETSC_COMM_WORLD, FILE, FILE_MODE_WRITE, &viewer);CHKERRQ(ierr);
-    ierr = PetscObjectSetName((PetscObject) temp,   "explicit-temp");CHKERRQ(ierr);
-    ierr = PetscObjectSetName((PetscObject) u_last, "explicit-vector");CHKERRQ(ierr);
-    ierr = VecView(temp, viewer);CHKERRQ(ierr);
-    ierr = VecView(u_last, viewer);CHKERRQ(ierr);
-    // ierr = PetscViewerDestroy(&viewer);CHKERRQ(ierr);
-    ierr = PetscTime(&t2);CHKERRQ(ierr);
-    t_write = t2-t1;
-    int n_step = (int)10 * t_write / t_iter;
-    ierr = PetscPrintf(PETSC_COMM_WORLD, "Write times = %d, t_iter=%g, t_write=%g\n", n_step, t_iter, t_write);CHKERRQ(ierr);
-
-    // ierr = PetscViewerHDF5Open(PETSC_COMM_WORLD, FILE, FILE_MODE_WRITE, &viewer);CHKERRQ(ierr);
     for (; it < iteration_num; it++)
     {
         t += dt;
@@ -253,7 +216,7 @@ int main(int argc, char **argv)
             4. u_last: 当前迭代的结果,copy了u_now的结果, 存u_last 有利于和上面的读文件统一
             保存文件的耗时非常高, 在一些测试中会暂时移除
         */
-        if (!(testing_mode)&&!(it % n_step))
+        if (!(testing_mode)&&!(it % 10))
         {
             value[0] = it;
             value[1] = size;
@@ -275,6 +238,9 @@ int main(int argc, char **argv)
             ierr = VecView(u_last, viewer);CHKERRQ(ierr);
             // ierr = PetscViewerDestroy(&viewer);CHKERRQ(ierr);
         }
+        // if(t>0.01){
+        //     break;
+        // }
     }
     ierr = PetscTime(&end);CHKERRQ(ierr);
     ierr = PetscPrintf(PETSC_COMM_WORLD, "Iteration Time = %g\n", end - begin);CHKERRQ(ierr);
