@@ -25,3 +25,4 @@ Notification: 最终版本是在TAIYI 上跑的，所以CMakeLists.txt 是TAIYI�
 ### 2022.6.8
 完成CMakeLists.txt 的书写, Makefile没有舍弃依旧保存着。
 构建方法，`cd build`; `cmake ../src`; `make`; 就可以构建完成
+本地装的是最新版，可以用`PetscCall`, TAIYI上装的是3.16.6 所以把PetscCall换回ierr
