@@ -1,0 +1,4 @@
+/home/bady/HPC_FinalProject/build/CMakeFiles/rebuild_cache.dir
+/home/bady/HPC_FinalProject/build/CMakeFiles/edit_cache.dir
+/home/bady/HPC_FinalProject/build/CMakeFiles/implicitMethod.dir
+/home/bady/HPC_FinalProject/build/CMakeFiles/explicitMethod.dir

@@ -1,0 +1,11 @@
+#!/bin/bash
+#BSUB -J Question-1
+#BSUB -q short
+#BSUB -n 40
+#BUSB -e Question-1.err
+#BUSB -o Question-1.out
+#BSUB -R "span[ptile=40]"
+
+module purge
+module load intel/2018.4
+module load mpi/intel/2018.4

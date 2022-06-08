@@ -1,0 +1,1 @@
+/home/bady/lib/mpich/bin/mpicc   -rdynamic CMakeFiles/explicitMethod.dir/explicitMethod.c.o  -o explicitMethod  -Wl,-rpath,/home/bady/lib/petsc-3.16.6-opt/lib -lm /home/bady/lib/petsc-3.16.6-opt/lib/libpetsc.so 

@@ -1,0 +1,1 @@
+/home/bady/lib/mpich/bin/mpicc   -rdynamic CMakeFiles/implicitMethod.dir/implicitMethod.c.o  -o implicitMethod  -Wl,-rpath,/home/bady/lib/petsc-3.16.6-opt/lib -lm /home/bady/lib/petsc-3.16.6-opt/lib/libpetsc.so 

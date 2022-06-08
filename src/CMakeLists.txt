@@ -1,17 +1,3 @@
-#
-#  This is a sample CMakeLists.txt suitable for direct use with a new PETSc application or
-#  you can add fragments of material below to an existing applications CMakeLists.txt
-#
-#  Usage:  To build ex1 from ex1.c
-#    rm -fr build
-#    mkdir build
-#    cd build
-#    cmake ..
-#    make
-#    ./ex1
-#
-#  By default it gets both the compiler information and the library information from PETSc
-#
 cmake_minimum_required(VERSION 3.1.0)
 
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
@@ -31,13 +17,23 @@ execute_process ( COMMAND pkg-config PETSc --variable=fcompiler COMMAND tr -d '\
 
 #  tells CMake to build the application ex1 from the source file ex1.c
 #  this must appear AFTER the compilers are set
-project(explicit)
+project(Method)
 LINK_LIBRARIES(m)
-add_executable(explicit explicitMethod.c)
+
 
 find_package(PkgConfig REQUIRED)
 find_package(MPI REQUIRED)
 pkg_search_module(PETSC REQUIRED IMPORTED_TARGET PETSc)
 INCLUDE_DIRECTORIES(/home/bady/lib/mpich/include)
-target_link_libraries(explicit PkgConfig::PETSC)
-target_link_libraries( explicit ${MPI_LIBRARIES})
+
+# Generate two execute file
+file(GLOB_RECURSE mains ${CMAKE_CURRENT_SOURCE_DIR} *.c)
+message(STATUS ${mains})
+foreach(mainfile IN LISTS mains)
+    # Get file name without directory
+    get_filename_component(mainname ${mainfile} NAME_WE)
+    add_executable(${mainname} ${mainfile})
+    target_link_libraries (${mainname} PkgConfig::PETSC)
+    target_link_libraries (${mainname} ${MPI_LIBRARIES})
+endforeach()
+

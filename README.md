@@ -3,6 +3,7 @@
 ## Information
 autior：苏梓鑫;
 Data:   2022/06/06;
+Notification: 最终版本是在TAIYI 上跑的，所以CMakeLists.txt 是TAIYI版本的，这里提供了本地版本的在local文件夹里
 ## Folder Introduction
 ### analysis
 ### bin
@@ -20,4 +21,7 @@ Data:   2022/06/06;
 ### 2022.6.6
 增加注释以及添加计时模块
 ### 2022.6.7
-完成HDF5重启功能
+完成HDF5重启功能，完成了包括误差对比等工作。
+### 2022.6.8
+完成CMakeLists.txt 的书写, Makefile没有舍弃依旧保存着。
+构建方法，`cd build`; `cmake ../src`; `make`; 就可以构建完成

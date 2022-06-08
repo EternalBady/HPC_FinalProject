@@ -1,5 +1,5 @@
 /*
-    显示方法处理一维传热方程
+    隐式方法处理一维传热方程
 */
 #include <petsc.h>
 #include <petscviewerhdf5.h>
@@ -14,7 +14,8 @@ int main(int argc, char **argv)
     // size就是从x的划分格数
     // iteration_num是迭代的次数，
     // restart 是指定是否重启，默认为0即不重启
-    PetscInt i, size = 100, iteration_num, Istart, Iend, col[3] = {0, 1, 2}, restart = 0, it = 0;
+    PetscInt i, size = 100, iteration_num, Istart, Iend, col[3] = {0, 1, 2}, 
+             restart = 0, it = 0, testing_mode = 0;
 
     // dx 空间步长, dt 时间步长, t为当前的时刻
     // lambda=CFL 就是CFL, gamma 则为报告分析中简化计算的两个中间量
@@ -42,6 +43,7 @@ int main(int argc, char **argv)
     PetscCall(PetscOptionsGetScalar(NULL, NULL, "-c", &c, NULL));
     PetscCall(PetscOptionsGetInt(NULL, NULL, "-restart", &restart, NULL));
     PetscCall(PetscOptionsGetInt(NULL, NULL, "-size", &size, NULL));
+    PetscCall(PetscOptionsGetInt(NULL, NULL, "-testing_mode", &testing_mode, NULL));
 
     /*初始化向量u_last, u_now, f, 解析解u_a, 暂存向量temp*/
     PetscCall(VecCreate(PETSC_COMM_WORLD, &f));
@@ -196,6 +198,51 @@ int main(int argc, char **argv)
 
     /* 第二处计时, 计算迭代所花的时间 */
     PetscCall(PetscTime(&begin));
+
+    PetscLogDouble t1, t2;
+    PetscScalar    t_iter, t_write;
+    PetscCall(PetscTime(&t1));
+    t += dt;
+    it ++;
+
+    PetscCall(VecWAXPY(b, gamma, f, u_last));
+    PetscCall(KSPSolve(ksp, b, u_now));
+
+    PetscCall(VecSetValue(u_now, 0, 0.0, INSERT_VALUES));
+    PetscCall(VecSetValue(u_now, size, 0.0, INSERT_VALUES));
+    PetscCall(VecAssemblyBegin(u_now));
+    PetscCall(VecAssemblyEnd(u_now));
+    // 将当前结果赋给上一次的vector
+    PetscCall(VecCopy(u_now, u_last));
+    PetscCall(PetscTime(&t2));
+    t_iter = t2-t1;
+
+    PetscCall(PetscTime(&t1));
+    value[0] = it;
+    value[1] = size;
+    value[2] = dt;
+    col[0] = 0;
+    col[1] = 1;
+    col[2] = 2;
+    PetscCall(VecSetValues(temp, 3, col, value, INSERT_VALUES));
+
+    PetscCall(VecAssemblyBegin(temp));
+    PetscCall(VecAssemblyEnd(temp));
+
+    /*利用viewer 存储temp和u_last*/
+    PetscCall(PetscViewerCreate(PETSC_COMM_WORLD, &viewer));
+    PetscCall(PetscViewerHDF5Open(PETSC_COMM_WORLD, FILE, FILE_MODE_WRITE, &viewer));
+    PetscCall(PetscObjectSetName((PetscObject) temp,   "explicit-temp"));
+    PetscCall(PetscObjectSetName((PetscObject) u_last, "explicit-vector"));
+    PetscCall(VecView(temp, viewer));
+    PetscCall(VecView(u_last, viewer));
+    PetscCall(PetscViewerDestroy(&viewer));
+    PetscCall(PetscTime(&t2));
+    t_write = t2-t1;
+    int n_step = (int)100 * t_write / t_iter;
+    PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Write times = %d, t_iter=%g, t_write=%g\n", n_step, t_iter, t_write));
+
+
     for (; it < iteration_num; it++)
     {
         t += dt;
@@ -211,14 +258,14 @@ int main(int argc, char **argv)
         PetscCall(VecCopy(u_now, u_last));
 
         /*
-            每20次迭代保存一次断点, 这里需要保存的有
+            每n_step次迭代保存一次断点, 这里需要保存的有
             1. it    : 迭代到哪一步;
-            2. size  : 网格大小
+            2. size  : 网格数量
             3. dt    : 时间步大小
             4. u_last: 当前迭代的结果,copy了u_now的结果, 存u_last 有利于和上面的读文件统一
             保存文件的耗时非常高, 在一些测试中会暂时移除
         */
-        if (!(it % 1000))
+        if (!(testing_mode)&&!(it % n_step))
         {
             value[0] = it;
             value[1] = size;
@@ -244,10 +291,10 @@ int main(int argc, char **argv)
     PetscCall(PetscTime(&end));
     PetscCall(PetscPrintf(PETSC_COMM_WORLD, "Iteration Time = %g\n", end - begin));
 
-    PetscCall(VecView(u_now, PETSC_VIEWER_STDOUT_WORLD));
+    // PetscCall(VecView(u_now, PETSC_VIEWER_STDOUT_WORLD));
     /*误差分析, 跟解析解对比*/
     PetscScalar x = 0.0, y = 0.0; // 用来暂存对比
-    for(i=0;i<size+1;i++){
+    for (i = Istart; i < Iend; i++){
         PetscCall(VecGetValues(u_a, 1, &i, &x));
         PetscCall(VecGetValues(u_last, 1, &i, &y));
         if(fabs(x-y) > error){
@@ -262,7 +309,6 @@ int main(int argc, char **argv)
     PetscCall(VecDestroy(&f));
     PetscCall(VecDestroy(&u_a));
     PetscCall(MatDestroy(&A));
-    PetscCall(PetscViewerDestroy(&viewer));
     PetscCall(PetscFinalize());
     return 0;
 }
