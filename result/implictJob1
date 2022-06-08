@@ -24,9 +24,9 @@ mpirun -np 35 ../build/implicitMethod -size 10000 -dt 0.00001 -testing_mode 1 -l
 mpirun -np 40 ../build/implicitMethod -size 10000 -dt 0.00001 -testing_mode 1 -log_view >>imp-noption.txt 2>&1
 
 # implicit iso-granular 
-mpirun -np 1  ../build/implicitMethod -size 10000 -dt 0.0001    -testing_mode 1 -log_view >>imp-foption.txt 2>&1
-mpirun -np 2  ../build/implicitMethod -size 10000 -dt 0.000095  -testing_mode 1 -log_view >>imp-foption.txt 2>&1
-mpirun -np 4  ../build/implicitMethod -size 10000 -dt 0.000065  -testing_mode 1 -log_view >>imp-foption.txt 2>&1
-mpirun -np 6  ../build/implicitMethod -size 10000 -dt 0.000043  -testing_mode 1 -log_view >>imp-foption.txt 2>&1
-mpirun -np 8  ../build/implicitMethod -size 10000 -dt 0.0000325 -testing_mode 1 -log_view >>imp-foption.txt 2>&1
-mpirun -np 10 ../build/implicitMethod -size 10000 -dt 0.000026  -testing_mode 1 -log_view >>imp-foption.txt 2>&1
+mpirun -np 1  ../build/implicitMethod -size 2000  -dt 0.00001  -testing_mode 1 -log_view >>imp-foption.txt 2>&1
+mpirun -np 2  ../build/implicitMethod -size 4000  -dt 0.00001  -testing_mode 1 -log_view >>imp-foption.txt 2>&1
+mpirun -np 4  ../build/implicitMethod -size 8000  -dt 0.00001  -testing_mode 1 -log_view >>imp-foption.txt 2>&1
+mpirun -np 6  ../build/implicitMethod -size 12000 -dt 0.00001  -testing_mode 1 -log_view >>imp-foption.txt 2>&1
+mpirun -np 8  ../build/implicitMethod -size 16000 -dt 0.00001  -testing_mode 1 -log_view >>imp-foption.txt 2>&1
+mpirun -np 10 ../build/implicitMethod -size 20000 -dt 0.00001  -testing_mode 1 -log_view >>imp-foption.txt 2>&1
