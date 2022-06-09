@@ -241,14 +241,11 @@ int main(int argc, char **argv)
             ierr = VecView(u_last, viewer);CHKERRQ(ierr);
             // ierr = PetscViewerDestroy(&viewer);CHKERRQ(ierr);
         }
-        if(it>10000){
-            break;
-        }
     }
     ierr = PetscTime(&end);CHKERRQ(ierr);
     ierr = PetscPrintf(PETSC_COMM_WORLD, "Iteration Time = %g\n", end - begin);CHKERRQ(ierr);
 
-    ierr = VecView(u_now, PETSC_VIEWER_STDOUT_WORLD);CHKERRQ(ierr);
+    // ierr = VecView(u_now, PETSC_VIEWER_STDOUT_WORLD);CHKERRQ(ierr);
     /*误差分析, 跟解析解对比*/
     PetscScalar x = 0.0, y = 0.0; // 用来暂存对比
     for (i = Istart; i < Iend; i++){

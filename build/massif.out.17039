@@ -1,0 +1,768 @@
+desc: (none)
+cmd: ./implicitMethod
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=43675764
+mem_heap_B=29773258
+mem_heap_extra_B=97262
+mem_stacks_B=0
+heap_tree=peak
+n8: 29773258 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 17305814 0x7B1BAEA: ADIOI_Malloc_fn (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 16777216 0x7B0BFCA: ADIO_Open (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 16777216 0x7AF020A: PMPI_File_open (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 16777216 0x9050076: H5FD__mpio_open (H5FDmpio.c:849)
+     n1: 16777216 0x8D07276: H5FD_open (H5FD.c:722)
+      n1: 16777216 0x8CE8902: H5F_open (H5Fint.c:1832)
+       n1: 16777216 0x90082E9: H5VL__native_file_create (H5VLnative_file.c:62)
+        n1: 16777216 0x8FEB5EE: H5VL__file_create (H5VLcallback.c:3247)
+         n1: 16777216 0x8FEB80D: H5VL_file_create (H5VLcallback.c:3281)
+          n1: 16777216 0x8CD43C4: H5Fcreate (H5F.c:530)
+           n1: 16777216 0x4D249B1: PetscViewerFileSetName_HDF5 (hdf5v.c:417)
+            n1: 16777216 0x4CE7693: PetscViewerFileSetName (filev.c:634)
+             n1: 16777216 0x4D27D75: PetscViewerHDF5Open (hdf5v.c:611)
+              n0: 16777216 0x10CD36: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+  n1: 524288 0x7B15DE9: ADIOI_GEN_WriteStrided (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 524288 0x7B147D4: ADIOI_GEN_WriteStridedColl (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 524288 0x7AF3DFD: MPIOI_File_write_all (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+     n1: 524288 0x7AF4424: PMPI_File_write_at_all (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+      n1: 524288 0x9051911: H5FD__mpio_write (H5FDmpio.c:1506)
+       n1: 524288 0x8D13DF7: H5FD_write (H5FDint.c:239)
+        n1: 524288 0x8CDE0C7: H5F__accum_write (H5Faccum.c:830)
+         n1: 524288 0x8E72F4B: H5PB_write (H5PB.c:1020)
+          n1: 524288 0x8CEF3D0: H5F_shared_block_write (H5Fio.c:190)
+           n1: 524288 0x8C6AED7: H5D__chunk_collective_fill (H5Dchunk.c:5023)
+            n1: 524288 0x8C69C19: H5D__chunk_allocate (H5Dchunk.c:4690)
+             n1: 524288 0x8C8BDE9: H5D__init_storage (H5Dint.c:2486)
+              n1: 524288 0x8C8B987: H5D__alloc_storage (H5Dint.c:2395)
+               n1: 524288 0x8C97365: H5D__layout_oh_create (H5Dlayout.c:496)
+                n1: 524288 0x8C85FE9: H5D__update_oh_info (H5Dint.c:1052)
+                 n1: 524288 0x8C87480: H5D__create (H5Dint.c:1364)
+                  n1: 524288 0x8C99068: H5O__dset_create (H5Doh.c:288)
+                   n1: 524288 0x8E00BC7: H5O_obj_create (H5Oint.c:2467)
+                    n1: 524288 0x8DA5CD9: H5L__link_cb (H5L.c:1813)
+                     n1: 524288 0x8D5FDC0: H5G__traverse_real (H5Gtraverse.c:612)
+                      n1: 524288 0x8D60D8D: H5G_traverse (H5Gtraverse.c:836)
+                       n1: 524288 0x8DA677A: H5L__create_real (H5L.c:2008)
+                        n1: 524288 0x8DA5B07: H5L_link_object (H5L.c:1766)
+                         n1: 524288 0x8C8397C: H5D__create_named (H5Dint.c:395)
+                          n1: 524288 0x9004D76: H5VL__native_dataset_create (H5VLnative_dataset.c:72)
+                           n1: 524288 0x8FE62A0: H5VL__dataset_create (H5VLcallback.c:1769)
+                            n1: 524288 0x8FE64D4: H5VL_dataset_create (H5VLcallback.c:1804)
+                             n1: 524288 0x8C52F05: H5Dcreate2 (H5D.c:139)
+                              n0: 524288 0x4E3F3AF: VecView_MPI_HDF5 (pdvec.c:682)
+  n0: 4310 in 28 places, all below massif's threshold (1.00%)
+ n1: 4196944 0x7AACFFE: MPIDU_shm_seg_commit (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 4196944 0x7A9BD80: MPID_nem_init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 4196944 0x7A90B96: MPIDI_CH3_Init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 4196944 0x7A82B17: MPID_Init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+     n1: 4196944 0x7979F19: MPIR_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+      n1: 4196944 0x797A5CC: PMPI_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+       n1: 4196944 0x4B58B27: PetscInitialize (pinit.c:1211)
+        n0: 4196944 0x10A80B: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+ n1: 2752512 0x7A8D7A3: MPIDI_RMA_init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 2752512 0x7A82D18: MPID_Init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 2752512 0x7979F19: MPIR_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 2752512 0x797A5CC: PMPI_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+     n1: 2752512 0x4B58B27: PetscInitialize (pinit.c:1211)
+      n0: 2752512 0x10A80B: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+ n2: 2601568 0x4BCA94C: PetscMallocAlign (mal.c:48)
+  n2: 2601568 0x4BCE881: PetscTrMallocDefault (mtr.c:183)
+   n3: 2578264 0x4BCC902: PetscMallocA (mal.c:414)
+    n3: 1443488 0x4D86181: PetscStrallocpy (str.c:182)
+     n1: 689940 0x4BBE280: PetscEventRegLogRegister (eventlog.c:302)
+      n1: 689940 0x4B82291: PetscLogEventRegister (plog.c:696)
+       n0: 689940 in 310 places, all below massif's threshold (1.00%)
+     n1: 511036 0x4DC34E8: PetscFunctionListAdd_Private (reg.c:264)
+      n0: 511036 in 22 places, all below massif's threshold (1.00%)
+     n0: 242512 in 30 places, all below massif's threshold (1.00%)
+    n0: 621004 in 82 places, all below massif's threshold (1.00%)
+    n1: 513772 0x4DC3478: PetscFunctionListAdd_Private (reg.c:263)
+     n0: 513772 in 22 places, all below massif's threshold (1.00%)
+   n0: 23304 in 1 place, below massif's threshold (1.00%)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 1310720 0x7A8D86D: MPIDI_RMA_init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 1310720 0x7A82D18: MPID_Init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 1310720 0x7979F19: MPIR_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 1310720 0x797A5CC: PMPI_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+     n1: 1310720 0x4B58B27: PetscInitialize (pinit.c:1211)
+      n0: 1310720 0x10A80B: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+ n2: 806277 0x8DBA032: H5MM_malloc (H5MM.c:313)
+  n2: 787676 0x8D2424C: H5FL__malloc (H5FL.c:246)
+   n2: 757144 0x8D2473E: H5FL_reg_malloc (H5FL.c:435)
+    n2: 601480 0x8D2483B: H5FL_reg_calloc (H5FL.c:489)
+     n1: 528264 0x8C2340E: H5C_create (H5C.c:304)
+      n1: 528264 0x8BF7F04: H5AC_create (H5AC.c:354)
+       n1: 528264 0x8CE725E: H5F__new (H5Fint.c:1330)
+        n1: 528264 0x8CE8FDC: H5F_open (H5Fint.c:1902)
+         n1: 528264 0x90082E9: H5VL__native_file_create (H5VLnative_file.c:62)
+          n1: 528264 0x8FEB5EE: H5VL__file_create (H5VLcallback.c:3247)
+           n1: 528264 0x8FEB80D: H5VL_file_create (H5VLcallback.c:3281)
+            n1: 528264 0x8CD43C4: H5Fcreate (H5F.c:530)
+             n1: 528264 0x4D249B1: PetscViewerFileSetName_HDF5 (hdf5v.c:417)
+              n1: 528264 0x4CE7693: PetscViewerFileSetName (filev.c:634)
+               n1: 528264 0x4D27D75: PetscViewerHDF5Open (hdf5v.c:611)
+                n0: 528264 0x10CD36: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+     n0: 73216 in 34 places, all below massif's threshold (1.00%)
+    n0: 155664 in 22 places, all below massif's threshold (1.00%)
+   n0: 30532 in 3 places, all below massif's threshold (1.00%)
+  n0: 18601 in 21 places, all below massif's threshold (1.00%)
+ n0: 496319 in 151 places, all below massif's threshold (1.00%)
+ n1: 303104 0x795D8FA: MPIR_Type_struct (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 303104 0x7963FAD: MPIR_Type_create_struct_impl (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 303104 0x796489F: PMPI_Type_create_struct (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 303104 0x4B5745E: PetscInitialize_Common (pinit.c:905)
+     n1: 303104 0x4B58C4C: PetscInitialize (pinit.c:1224)
+      n0: 303104 0x10A80B: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+#-----------
+snapshot=2
+#-----------
+time=307110844
+mem_heap_B=29331448
+mem_heap_extra_B=98936
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=709545976
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=961109331
+mem_heap_B=29330336
+mem_heap_extra_B=98936
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=1272377435
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=1503017538
+mem_heap_B=29330296
+mem_heap_extra_B=98904
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=1899844974
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=2422594536
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=2786222237
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=3192870219
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=3718210129
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=4210708842
+mem_heap_B=29330336
+mem_heap_extra_B=98936
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=4655322951
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=5019159865
+mem_heap_B=29331100
+mem_heap_extra_B=99060
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=5519434257
+mem_heap_B=29333928
+mem_heap_extra_B=99064
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=5928728991
+mem_heap_B=29330896
+mem_heap_extra_B=98984
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=6428976900
+mem_heap_B=29333928
+mem_heap_extra_B=99064
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=6828135863
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=7151393134
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=7636286565
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=7959507552
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=8363548855
+mem_heap_B=29330296
+mem_heap_extra_B=98904
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=8686798699
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=9010019054
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=9414061564
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=9737311337
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=10060531999
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=10464572759
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=detailed
+n8: 29330320 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 16781434 0x7B1BAEA: ADIOI_Malloc_fn (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 16777216 0x7B0BFCA: ADIO_Open (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 16777216 0x7AF020A: PMPI_File_open (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 16777216 0x9050076: H5FD__mpio_open (H5FDmpio.c:849)
+     n1: 16777216 0x8D07276: H5FD_open (H5FD.c:722)
+      n1: 16777216 0x8CE8902: H5F_open (H5Fint.c:1832)
+       n1: 16777216 0x90082E9: H5VL__native_file_create (H5VLnative_file.c:62)
+        n1: 16777216 0x8FEB5EE: H5VL__file_create (H5VLcallback.c:3247)
+         n1: 16777216 0x8FEB80D: H5VL_file_create (H5VLcallback.c:3281)
+          n1: 16777216 0x8CD43C4: H5Fcreate (H5F.c:530)
+           n1: 16777216 0x4D249B1: PetscViewerFileSetName_HDF5 (hdf5v.c:417)
+            n1: 16777216 0x4CE7693: PetscViewerFileSetName (filev.c:634)
+             n1: 16777216 0x4D27D75: PetscViewerHDF5Open (hdf5v.c:611)
+              n0: 16777216 0x10CD36: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+  n0: 4218 in 29 places, all below massif's threshold (1.00%)
+ n1: 4196944 0x7AACFFE: MPIDU_shm_seg_commit (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 4196944 0x7A9BD80: MPID_nem_init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 4196944 0x7A90B96: MPIDI_CH3_Init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 4196944 0x7A82B17: MPID_Init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+     n1: 4196944 0x7979F19: MPIR_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+      n1: 4196944 0x797A5CC: PMPI_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+       n1: 4196944 0x4B58B27: PetscInitialize (pinit.c:1211)
+        n0: 4196944 0x10A80B: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+ n1: 2752512 0x7A8D7A3: MPIDI_RMA_init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 2752512 0x7A82D18: MPID_Init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 2752512 0x7979F19: MPIR_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 2752512 0x797A5CC: PMPI_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+     n1: 2752512 0x4B58B27: PetscInitialize (pinit.c:1211)
+      n0: 2752512 0x10A80B: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+ n2: 2601568 0x4BCA94C: PetscMallocAlign (mal.c:48)
+  n2: 2601568 0x4BCE881: PetscTrMallocDefault (mtr.c:183)
+   n3: 2578264 0x4BCC902: PetscMallocA (mal.c:414)
+    n3: 1443488 0x4D86181: PetscStrallocpy (str.c:182)
+     n1: 689940 0x4BBE280: PetscEventRegLogRegister (eventlog.c:302)
+      n1: 689940 0x4B82291: PetscLogEventRegister (plog.c:696)
+       n0: 689940 in 310 places, all below massif's threshold (1.00%)
+     n1: 511036 0x4DC34E8: PetscFunctionListAdd_Private (reg.c:264)
+      n0: 511036 in 22 places, all below massif's threshold (1.00%)
+     n0: 242512 in 30 places, all below massif's threshold (1.00%)
+    n0: 621004 in 82 places, all below massif's threshold (1.00%)
+    n1: 513772 0x4DC3478: PetscFunctionListAdd_Private (reg.c:263)
+     n0: 513772 in 22 places, all below massif's threshold (1.00%)
+   n0: 23304 in 1 place, below massif's threshold (1.00%)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 1310720 0x7A8D86D: MPIDI_RMA_init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 1310720 0x7A82D18: MPID_Init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 1310720 0x7979F19: MPIR_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 1310720 0x797A5CC: PMPI_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+     n1: 1310720 0x4B58B27: PetscInitialize (pinit.c:1211)
+      n0: 1310720 0x10A80B: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+ n2: 896333 0x8DBA032: H5MM_malloc (H5MM.c:313)
+  n2: 877564 0x8D2424C: H5FL__malloc (H5FL.c:246)
+   n2: 786120 0x8D2473E: H5FL_reg_malloc (H5FL.c:435)
+    n2: 608232 0x8D2483B: H5FL_reg_calloc (H5FL.c:489)
+     n1: 528264 0x8C2340E: H5C_create (H5C.c:304)
+      n1: 528264 0x8BF7F04: H5AC_create (H5AC.c:354)
+       n1: 528264 0x8CE725E: H5F__new (H5Fint.c:1330)
+        n1: 528264 0x8CE8FDC: H5F_open (H5Fint.c:1902)
+         n1: 528264 0x90082E9: H5VL__native_file_create (H5VLnative_file.c:62)
+          n1: 528264 0x8FEB5EE: H5VL__file_create (H5VLcallback.c:3247)
+           n1: 528264 0x8FEB80D: H5VL_file_create (H5VLcallback.c:3281)
+            n1: 528264 0x8CD43C4: H5Fcreate (H5F.c:530)
+             n1: 528264 0x4D249B1: PetscViewerFileSetName_HDF5 (hdf5v.c:417)
+              n1: 528264 0x4CE7693: PetscViewerFileSetName (filev.c:634)
+               n1: 528264 0x4D27D75: PetscViewerHDF5Open (hdf5v.c:611)
+                n0: 528264 0x10CD36: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+     n0: 79968 in 38 places, all below massif's threshold (1.00%)
+    n0: 177888 in 33 places, all below massif's threshold (1.00%)
+   n0: 91444 in 3 places, all below massif's threshold (1.00%)
+  n0: 18769 in 24 places, all below massif's threshold (1.00%)
+ n0: 487705 in 151 places, all below massif's threshold (1.00%)
+ n1: 303104 0x795D8FA: MPIR_Type_struct (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 303104 0x7963FAD: MPIR_Type_create_struct_impl (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 303104 0x796489F: PMPI_Type_create_struct (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 303104 0x4B5745E: PetscInitialize_Common (pinit.c:905)
+     n1: 303104 0x4B58C4C: PetscInitialize (pinit.c:1224)
+      n0: 303104 0x10A80B: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+#-----------
+snapshot=29
+#-----------
+time=10787823472
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=11105983028
+mem_heap_B=29330360
+mem_heap_extra_B=98912
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=11424172936
+mem_heap_B=29330296
+mem_heap_extra_B=98904
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=11901447262
+mem_heap_B=29333920
+mem_heap_extra_B=99048
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=12378714628
+mem_heap_B=29334508
+mem_heap_extra_B=99100
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=12856019514
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=13174178538
+mem_heap_B=29330360
+mem_heap_extra_B=98912
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=13492368286
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=13969642677
+mem_heap_B=29333920
+mem_heap_extra_B=99048
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=14446909996
+mem_heap_B=29334508
+mem_heap_extra_B=99100
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=14765101603
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=15242374745
+mem_heap_B=29330360
+mem_heap_extra_B=98912
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=15560565199
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=16037840090
+mem_heap_B=29333920
+mem_heap_extra_B=99048
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=16515108052
+mem_heap_B=29334508
+mem_heap_extra_B=99100
+mem_stacks_B=0
+heap_tree=detailed
+n8: 29334508 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 16781434 0x7B1BAEA: ADIOI_Malloc_fn (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 16777216 0x7B0BFCA: ADIO_Open (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 16777216 0x7AF020A: PMPI_File_open (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 16777216 0x9050076: H5FD__mpio_open (H5FDmpio.c:849)
+     n1: 16777216 0x8D07276: H5FD_open (H5FD.c:722)
+      n1: 16777216 0x8CE8902: H5F_open (H5Fint.c:1832)
+       n1: 16777216 0x90082E9: H5VL__native_file_create (H5VLnative_file.c:62)
+        n1: 16777216 0x8FEB5EE: H5VL__file_create (H5VLcallback.c:3247)
+         n1: 16777216 0x8FEB80D: H5VL_file_create (H5VLcallback.c:3281)
+          n1: 16777216 0x8CD43C4: H5Fcreate (H5F.c:530)
+           n1: 16777216 0x4D249B1: PetscViewerFileSetName_HDF5 (hdf5v.c:417)
+            n1: 16777216 0x4CE7693: PetscViewerFileSetName (filev.c:634)
+             n1: 16777216 0x4D27D75: PetscViewerHDF5Open (hdf5v.c:611)
+              n0: 16777216 0x10CD36: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+  n0: 4218 in 29 places, all below massif's threshold (1.00%)
+ n1: 4196944 0x7AACFFE: MPIDU_shm_seg_commit (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 4196944 0x7A9BD80: MPID_nem_init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 4196944 0x7A90B96: MPIDI_CH3_Init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 4196944 0x7A82B17: MPID_Init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+     n1: 4196944 0x7979F19: MPIR_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+      n1: 4196944 0x797A5CC: PMPI_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+       n1: 4196944 0x4B58B27: PetscInitialize (pinit.c:1211)
+        n0: 4196944 0x10A80B: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+ n1: 2752512 0x7A8D7A3: MPIDI_RMA_init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 2752512 0x7A82D18: MPID_Init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 2752512 0x7979F19: MPIR_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 2752512 0x797A5CC: PMPI_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+     n1: 2752512 0x4B58B27: PetscInitialize (pinit.c:1211)
+      n0: 2752512 0x10A80B: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+ n2: 2601568 0x4BCA94C: PetscMallocAlign (mal.c:48)
+  n2: 2601568 0x4BCE881: PetscTrMallocDefault (mtr.c:183)
+   n3: 2578264 0x4BCC902: PetscMallocA (mal.c:414)
+    n3: 1443488 0x4D86181: PetscStrallocpy (str.c:182)
+     n1: 689940 0x4BBE280: PetscEventRegLogRegister (eventlog.c:302)
+      n1: 689940 0x4B82291: PetscLogEventRegister (plog.c:696)
+       n0: 689940 in 310 places, all below massif's threshold (1.00%)
+     n1: 511036 0x4DC34E8: PetscFunctionListAdd_Private (reg.c:264)
+      n0: 511036 in 22 places, all below massif's threshold (1.00%)
+     n0: 242512 in 30 places, all below massif's threshold (1.00%)
+    n0: 621004 in 82 places, all below massif's threshold (1.00%)
+    n1: 513772 0x4DC3478: PetscFunctionListAdd_Private (reg.c:263)
+     n0: 513772 in 22 places, all below massif's threshold (1.00%)
+   n0: 23304 in 1 place, below massif's threshold (1.00%)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 1310720 0x7A8D86D: MPIDI_RMA_init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 1310720 0x7A82D18: MPID_Init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 1310720 0x7979F19: MPIR_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 1310720 0x797A5CC: PMPI_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+     n1: 1310720 0x4B58B27: PetscInitialize (pinit.c:1211)
+      n0: 1310720 0x10A80B: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+ n2: 900545 0x8DBA032: H5MM_malloc (H5MM.c:313)
+  n2: 877564 0x8D2424C: H5FL__malloc (H5FL.c:246)
+   n2: 786120 0x8D2473E: H5FL_reg_malloc (H5FL.c:435)
+    n2: 608232 0x8D2483B: H5FL_reg_calloc (H5FL.c:489)
+     n1: 528264 0x8C2340E: H5C_create (H5C.c:304)
+      n1: 528264 0x8BF7F04: H5AC_create (H5AC.c:354)
+       n1: 528264 0x8CE725E: H5F__new (H5Fint.c:1330)
+        n1: 528264 0x8CE8FDC: H5F_open (H5Fint.c:1902)
+         n1: 528264 0x90082E9: H5VL__native_file_create (H5VLnative_file.c:62)
+          n1: 528264 0x8FEB5EE: H5VL__file_create (H5VLcallback.c:3247)
+           n1: 528264 0x8FEB80D: H5VL_file_create (H5VLcallback.c:3281)
+            n1: 528264 0x8CD43C4: H5Fcreate (H5F.c:530)
+             n1: 528264 0x4D249B1: PetscViewerFileSetName_HDF5 (hdf5v.c:417)
+              n1: 528264 0x4CE7693: PetscViewerFileSetName (filev.c:634)
+               n1: 528264 0x4D27D75: PetscViewerHDF5Open (hdf5v.c:611)
+                n0: 528264 0x10CD36: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+     n0: 79968 in 38 places, all below massif's threshold (1.00%)
+    n0: 177888 in 33 places, all below massif's threshold (1.00%)
+   n0: 91444 in 3 places, all below massif's threshold (1.00%)
+  n0: 22981 in 24 places, all below massif's threshold (1.00%)
+ n0: 487681 in 151 places, all below massif's threshold (1.00%)
+ n1: 303104 0x795D8FA: MPIR_Type_struct (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 303104 0x7963FAD: MPIR_Type_create_struct_impl (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 303104 0x796489F: PMPI_Type_create_struct (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 303104 0x4B5745E: PetscInitialize_Common (pinit.c:905)
+     n1: 303104 0x4B58C4C: PetscInitialize (pinit.c:1224)
+      n0: 303104 0x10A80B: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+#-----------
+snapshot=44
+#-----------
+time=16833299813
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=17310574177
+mem_heap_B=29330360
+mem_heap_extra_B=98912
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=17628763598
+mem_heap_B=29330296
+mem_heap_extra_B=98904
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=18106037811
+mem_heap_B=29333920
+mem_heap_extra_B=99048
+mem_stacks_B=0
+heap_tree=detailed
+n8: 29333920 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 16781434 0x7B1BAEA: ADIOI_Malloc_fn (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 16777216 0x7B0BFCA: ADIO_Open (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 16777216 0x7AF020A: PMPI_File_open (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 16777216 0x9050076: H5FD__mpio_open (H5FDmpio.c:849)
+     n1: 16777216 0x8D07276: H5FD_open (H5FD.c:722)
+      n1: 16777216 0x8CE8902: H5F_open (H5Fint.c:1832)
+       n1: 16777216 0x90082E9: H5VL__native_file_create (H5VLnative_file.c:62)
+        n1: 16777216 0x8FEB5EE: H5VL__file_create (H5VLcallback.c:3247)
+         n1: 16777216 0x8FEB80D: H5VL_file_create (H5VLcallback.c:3281)
+          n1: 16777216 0x8CD43C4: H5Fcreate (H5F.c:530)
+           n1: 16777216 0x4D249B1: PetscViewerFileSetName_HDF5 (hdf5v.c:417)
+            n1: 16777216 0x4CE7693: PetscViewerFileSetName (filev.c:634)
+             n1: 16777216 0x4D27D75: PetscViewerHDF5Open (hdf5v.c:611)
+              n0: 16777216 0x10CD36: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+  n0: 4218 in 29 places, all below massif's threshold (1.00%)
+ n1: 4196944 0x7AACFFE: MPIDU_shm_seg_commit (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 4196944 0x7A9BD80: MPID_nem_init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 4196944 0x7A90B96: MPIDI_CH3_Init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 4196944 0x7A82B17: MPID_Init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+     n1: 4196944 0x7979F19: MPIR_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+      n1: 4196944 0x797A5CC: PMPI_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+       n1: 4196944 0x4B58B27: PetscInitialize (pinit.c:1211)
+        n0: 4196944 0x10A80B: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+ n1: 2752512 0x7A8D7A3: MPIDI_RMA_init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 2752512 0x7A82D18: MPID_Init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 2752512 0x7979F19: MPIR_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 2752512 0x797A5CC: PMPI_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+     n1: 2752512 0x4B58B27: PetscInitialize (pinit.c:1211)
+      n0: 2752512 0x10A80B: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+ n2: 2601568 0x4BCA94C: PetscMallocAlign (mal.c:48)
+  n2: 2601568 0x4BCE881: PetscTrMallocDefault (mtr.c:183)
+   n3: 2578264 0x4BCC902: PetscMallocA (mal.c:414)
+    n3: 1443488 0x4D86181: PetscStrallocpy (str.c:182)
+     n1: 689940 0x4BBE280: PetscEventRegLogRegister (eventlog.c:302)
+      n1: 689940 0x4B82291: PetscLogEventRegister (plog.c:696)
+       n0: 689940 in 310 places, all below massif's threshold (1.00%)
+     n1: 511036 0x4DC34E8: PetscFunctionListAdd_Private (reg.c:264)
+      n0: 511036 in 22 places, all below massif's threshold (1.00%)
+     n0: 242512 in 30 places, all below massif's threshold (1.00%)
+    n0: 621004 in 82 places, all below massif's threshold (1.00%)
+    n1: 513772 0x4DC3478: PetscFunctionListAdd_Private (reg.c:263)
+     n0: 513772 in 22 places, all below massif's threshold (1.00%)
+   n0: 23304 in 1 place, below massif's threshold (1.00%)
+  n0: 0 in 1 place, below massif's threshold (1.00%)
+ n1: 1310720 0x7A8D86D: MPIDI_RMA_init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 1310720 0x7A82D18: MPID_Init (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 1310720 0x7979F19: MPIR_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 1310720 0x797A5CC: PMPI_Init_thread (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+     n1: 1310720 0x4B58B27: PetscInitialize (pinit.c:1211)
+      n0: 1310720 0x10A80B: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+ n2: 899957 0x8DBA032: H5MM_malloc (H5MM.c:313)
+  n2: 877564 0x8D2424C: H5FL__malloc (H5FL.c:246)
+   n2: 786120 0x8D2473E: H5FL_reg_malloc (H5FL.c:435)
+    n2: 608232 0x8D2483B: H5FL_reg_calloc (H5FL.c:489)
+     n1: 528264 0x8C2340E: H5C_create (H5C.c:304)
+      n1: 528264 0x8BF7F04: H5AC_create (H5AC.c:354)
+       n1: 528264 0x8CE725E: H5F__new (H5Fint.c:1330)
+        n1: 528264 0x8CE8FDC: H5F_open (H5Fint.c:1902)
+         n1: 528264 0x90082E9: H5VL__native_file_create (H5VLnative_file.c:62)
+          n1: 528264 0x8FEB5EE: H5VL__file_create (H5VLcallback.c:3247)
+           n1: 528264 0x8FEB80D: H5VL_file_create (H5VLcallback.c:3281)
+            n1: 528264 0x8CD43C4: H5Fcreate (H5F.c:530)
+             n1: 528264 0x4D249B1: PetscViewerFileSetName_HDF5 (hdf5v.c:417)
+              n1: 528264 0x4CE7693: PetscViewerFileSetName (filev.c:634)
+               n1: 528264 0x4D27D75: PetscViewerHDF5Open (hdf5v.c:611)
+                n0: 528264 0x10CD36: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+     n0: 79968 in 38 places, all below massif's threshold (1.00%)
+    n0: 177888 in 33 places, all below massif's threshold (1.00%)
+   n0: 91444 in 3 places, all below massif's threshold (1.00%)
+  n0: 22393 in 24 places, all below massif's threshold (1.00%)
+ n0: 487681 in 151 places, all below massif's threshold (1.00%)
+ n1: 303104 0x795D8FA: MPIR_Type_struct (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+  n1: 303104 0x7963FAD: MPIR_Type_create_struct_impl (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+   n1: 303104 0x796489F: PMPI_Type_create_struct (in /home/bady/lib/mpich/lib/libmpi.so.12.1.8)
+    n1: 303104 0x4B5745E: PetscInitialize_Common (pinit.c:905)
+     n1: 303104 0x4B58C4C: PetscInitialize (pinit.c:1224)
+      n0: 303104 0x10A80B: main (in /home/bady/HPC_FinalProject/build/implicitMethod)
+#-----------
+snapshot=48
+#-----------
+time=18583305536
+mem_heap_B=29334508
+mem_heap_extra_B=99100
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=18742418645
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=50
+#-----------
+time=18901531759
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=51
+#-----------
+time=19060645314
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=52
+#-----------
+time=19219790009
+mem_heap_B=29330320
+mem_heap_extra_B=98920
+mem_stacks_B=0
+heap_tree=empty

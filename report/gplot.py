@@ -17,13 +17,13 @@ plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 
 plt.scatter(x, explicit, color='blue')
-plt.plot(x, anayls, color='red', linewidth=3)
+plt.plot(x, anayls, color='red', linewidth=1)
 plt.title('显式迭代结果')
 plt.xlabel('dx')
 plt.show()
 
 plt.scatter(x, implicit, color='green')
-plt.plot(x, anayls, color='red', linewidth=3)
+plt.plot(x, anayls, color='red', linewidth=1)
 plt.title('隐式迭代结果')
 plt.xlabel('dx')
 

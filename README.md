@@ -8,12 +8,32 @@ Data:   2022/06/06;
 Notification: 最终版本是在TAIYI 上跑的，所以CMakeLists.txt 是TAIYI版本的，这里提供了本地版本的在local文件夹里
 ## 使用说明
 
-## Folder Introduction
-### analysis
-### bin
-### lib
-### src
-## File Introduction
+ls 查看是否有build文件夹，如果有，
+
+`rm -rf build`
+
+`mkdir build`
+
+`cd build`
+
+`cmake ../src`
+
+`make`
+
+即可生成可执行文件，implicitMethod 和 explicitMethod
+
+## 文件夹解释
+
+report 存放着latex文件，部分图片还没弄进来。 gplot.py 是绘图部分
+
+local 存放一些杂乱文件
+
+result 存放着跑出来的结果，TAIYI文件夹中才有
+
+src  源代码文件以及 Makefile 和 CMakeList.txt 其中需要修改路径
+
+
+
 
 ## Log
 ### 2022.6.1
@@ -30,3 +50,5 @@ Notification: 最终版本是在TAIYI 上跑的，所以CMakeLists.txt 是TAIYI�
 完成CMakeLists.txt 的书写, Makefile没有舍弃依旧保存着。
 构建方法，`cd build`; `cmake ../src`; `make`; 就可以构建完成
 本地装的是最新版，可以用`PetscCall`, TAIYI上装的是3.16.6 所以把PetscCall换回ierr
+### 2022.6.9 
+完成所有任务，提交最终版。

@@ -230,17 +230,11 @@ int main(int argc, char **argv)
             ierr = VecAssemblyEnd(temp);CHKERRQ(ierr);
 
             /*利用viewer 存储temp和u_last*/
-            // ierr = PetscViewerCreate(PETSC_COMM_WORLD, &viewer);CHKERRQ(ierr);
-            // ierr = PetscViewerHDF5Open(PETSC_COMM_WORLD, FILE, FILE_MODE_WRITE, &viewer);CHKERRQ(ierr);
             ierr = PetscObjectSetName((PetscObject) temp,   "explicit-temp");CHKERRQ(ierr);
             ierr = PetscObjectSetName((PetscObject) u_last, "explicit-vector");CHKERRQ(ierr);
             ierr = VecView(temp, viewer);CHKERRQ(ierr);
             ierr = VecView(u_last, viewer);CHKERRQ(ierr);
-            // ierr = PetscViewerDestroy(&viewer);CHKERRQ(ierr);
         }
-        // if(t>0.01){
-        //     break;
-        // }
     }
     ierr = PetscTime(&end);CHKERRQ(ierr);
     ierr = PetscPrintf(PETSC_COMM_WORLD, "Iteration Time = %g\n", end - begin);CHKERRQ(ierr);
